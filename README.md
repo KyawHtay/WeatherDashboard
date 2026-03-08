@@ -122,3 +122,42 @@ Add the key in appsettings.json
     "ApiKey": "YOUR_API_KEY"
   }
 }
+💻 Frontend Setup
+
+Navigate to the React project:
+cd frontend/weather-dashboard-ui
+
+Install dependencies:
+npm install
+
+Run the application:
+npm start
+
+Frontend will run at:
+
+http://localhost:3000
+
+🔗 API Endpoints
+| Method | Endpoint              | Description              |
+| ------ | --------------------- | ------------------------ |
+| GET    | `/api/weather/{city}` | Retrieve weather by city |
+
+Example
+
+GET /api/weather/London
+
+Response
+
+{
+  "city": "London",
+  "temperature": 11.2,
+  "humidity": 78,
+  "windSpeed": 4.1,
+  "icon": "04d"
+}
+
+🧪 Running Tests
+Backend
+dotnet test
+Frontend
+npm test
