@@ -1,37 +1,39 @@
-using Microsoft.OpenApi.Models;
 using WeatherDashboard.Application.Services;
 using WeatherDashboard.Infrastructure.Repositories;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 builder.Services.AddControllers();
-
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen();
+
+// CORS
+builder.Services.AddCors(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Weather Dashboard API", Version = "v1" });
+    options.AddPolicy("ReactFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
-// HttpClient for external API
-builder.Services.AddHttpClient();
-
-// Dependency Injection
-builder.Services.AddScoped<IWeatherRepository, WeatherRepository>();
+builder.Services.AddHttpClient<IWeatherRepository, WeatherRepository>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 
 var app = builder.Build();
 
-// Swagger (only in development)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Weather Dashboard API v1"));
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("ReactFrontend");
 
 app.UseAuthorization();
 
